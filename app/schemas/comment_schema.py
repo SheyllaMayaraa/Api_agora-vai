@@ -1,0 +1,17 @@
+from .. import ma
+from marshmallow import fields, validate
+from ..models.comment import Comment
+from .user_schema import UserSchema
+
+class CommentSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Comment
+        fields = ("id", "content", "created_at", "message_id", "user_id", "autor")
+
+    id = fields.Int(dump_only=True)
+    content = fields.Str(required=True, validate=validate.Length(min=1, max=255))
+    created_at = fields.DateTime(dump_only=True)
+    message_id = fields.Int(required=True, load_only=True)
+    autor = fields.Nested(UserSchema, dump_only=True)
+    user_id = fields.Int(dump_only=True)
+
