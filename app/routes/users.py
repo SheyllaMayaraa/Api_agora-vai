@@ -1,6 +1,8 @@
 from flask import Blueprint, request, abort
 from ..schemas.user_schema import UserSchema
 from ..controllers import user_controller
+from werkzeug.security import generate_password_hash
+
 
 users_bp = Blueprint("users", __name__)
 user_schema = UserSchema()
@@ -21,6 +23,7 @@ def get_user(user_id):
 @users_bp.route("/", methods=["POST"])
 def create_user():
     data = request.get_json()
+    data["senha"] = generate_password_hash(data["senha"])
     validated = user_schema.load(data)
     novo = user_controller.criar_usuario(validated)
     return user_schema.jsonify(novo), 201
@@ -35,7 +38,7 @@ def update_user(user_id):
     atualizado = user_controller.atualizar_usuario(user, validated)
     return user_schema.jsonify(atualizado), 200
 
-@users_bp.route("/users/<int:user_id>", methods=["DELETE"])
+@users_bp.route("/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = user_controller.obter_usuario(user_id)
     if not user:

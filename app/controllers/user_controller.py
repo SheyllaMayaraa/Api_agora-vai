@@ -8,7 +8,7 @@ def obter_usuario(user_id):
     return User.query.get(user_id)
 
 def criar_usuario(dados):
-    novo = dados
+    novo = User(**dados)
     db.session.add(novo)
     db.session.commit()
     return novo

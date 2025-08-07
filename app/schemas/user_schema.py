@@ -6,7 +6,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         fields = ("id", "nome", "email", "admin", "senha")
-        load_instance = True
+        
 
     id = fields.Int(dump_only=True)
     nome = fields.Str(required=True, validate=validate.Length(min=2, max=80))
